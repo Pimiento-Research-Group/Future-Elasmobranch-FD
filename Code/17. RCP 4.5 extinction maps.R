@@ -1,0 +1,351 @@
+###############################################################################################################
+# 17. RCP 4.5 extinction maps
+## This R code plots the functional diversity shift under RCP 4.5 climate change
+## while accounting for median extinction times recorded by IUCN_sim
+## It produces data necessary for all map plotting
+###############################################################################################################
+
+# Import packages
+library(tidyverse)
+library(reshape2)
+library(ggsci)
+library(tibble)
+library(scales)
+library(cowplot)
+library(RColorBrewer)
+library(maps)
+library(viridis)
+library(ggthemes)
+library(wesanderson)
+
+# Form map template
+world <- map_data("world")
+gmap <- ggplot() +
+  geom_map(data = world, map = world,
+           aes(long, lat, map_id = region),
+           color = "black", fill = "lightgray", size = 0.2) +
+  xlab("Longitude") +
+  ylab("Latitude") +
+  ggtitle("") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  theme_minimal() +
+  theme_bw() +
+  theme(panel.grid = element_blank(), 
+        panel.border = element_rect(fill = "transparent"))
+
+## Load present-day to calculate shifts
+load(file = "C:/Users/2022207/Dropbox/Jack's PhD/Chapter 3. Future shark FD/Analyses/Final paper R codes/data/AquaMaps/FD_AqMap_map_df.RData")
+load(file = "C:/Users/2022207/Dropbox/Jack's PhD/Chapter 3. Future shark FD/Analyses/Final paper R codes/data/AquaMaps/FD_AqMap_Species_richness_map.RData")
+
+## Load RCP45 with extinctions
+load(file = "C:/Users/2022207/Dropbox/Jack's PhD/Chapter 3. Future shark FD/Analyses/Final paper R codes/data/AquaMaps/FD_RCP45_extinctions_map_df.RData")
+load(file = "C:/Users/2022207/Dropbox/Jack's PhD/Chapter 3. Future shark FD/Analyses/Final paper R codes/data/AquaMaps/FD_RCP45_extinctions_Species_richness_map.RData")
+
+## Distribution maps
+Map1 <- gmap +
+  geom_point(
+    data = RCP45_ext_Occ_map,
+    aes(CenterLong, CenterLat, color = Spp_Richn),
+    size = 0.01,
+    alpha = 0.2,
+    inherit.aes = FALSE
+  ) +
+  scale_color_viridis(discrete = FALSE) +
+  labs(title = "", x = "Longitude", y = "Latitude") +
+  theme_minimal() +
+  theme_bw() +
+  theme(
+    panel.grid = element_blank(), 
+    panel.border = element_rect(fill= "transparent"),
+    legend.position = "right",
+    plot.title = element_text(hjust = 0.5)
+  )
+
+Map2 <- gmap +
+  geom_point(
+    data = final_map_df_RCP45_extinctions,
+    aes(CenterLong, CenterLat, color = fric),
+    size = 0.01,
+    alpha = 0.2,
+    inherit.aes = FALSE
+  ) +
+  scale_color_viridis(discrete = FALSE) +
+  labs(title = "", x = "Longitude", y = "Latitude") +
+  theme_minimal() +
+  theme_bw() +
+  theme(
+    panel.grid = element_blank(), 
+    panel.border = element_rect(fill= "transparent"),
+    legend.position = "right",
+    plot.title = element_text(hjust = 0.5)
+  )
+
+Map3 <- gmap +
+  geom_point(
+    data = final_map_df_RCP45_extinctions,
+    aes(CenterLong, CenterLat, color = fun),
+    size = 0.01,
+    alpha = 0.2,
+    inherit.aes = FALSE
+  ) +
+  scale_color_viridis(discrete = FALSE) +
+  labs(title = "", x = "Longitude", y = "Latitude") +
+  theme_minimal() +
+  theme_bw() +
+  theme(
+    panel.grid = element_blank(), 
+    panel.border = element_rect(fill= "transparent"),
+    legend.position = "right",
+    plot.title = element_text(hjust = 0.5)
+  )
+
+Map4 <- gmap +
+  geom_point(
+    data = final_map_df_RCP45_extinctions,
+    aes(CenterLong, CenterLat, color = fsp),
+    size = 0.01,
+    alpha = 0.2,
+    inherit.aes = FALSE
+  ) +
+  scale_color_viridis(discrete = FALSE) +
+  labs(title = "", x = "Longitude", y = "Latitude") +
+  theme_minimal() +
+  theme_bw() +
+  theme(
+    panel.grid = element_blank(), 
+    panel.border = element_rect(fill= "transparent"),
+    legend.position = "right",
+    plot.title = element_text(hjust = 0.5)
+  )
+
+# Plot 4 maps together
+RCP45_extinctions_map <- plot_grid(Map1, Map2, Map3, Map4,
+                                   labels = c("(a)", "(b)", "(c)", "(d)"), 
+                                   label_size = 12, align = "hv", label_fontface = "bold", nrow = 2, ncol = 2)
+
+# Join the dataframes based on common columns & calculate metric shifts
+merged_data_RCP45ext_FD <- left_join(final_map_df_AqMap, final_map_df_RCP45_extinctions, by = c("Grid"))
+merged_data_RCP45ext_FD <- merged_data_RCP45ext_FD %>%
+  mutate(FRic_Diff = fric.y - fric.x) %>% 
+  mutate(FUn_Diff = fun.y - fun.x) %>% 
+  mutate(FSp_Diff = fsp.y - fsp.x)
+merged_data_RCP45ext_FD <- merged_data_RCP45ext_FD %>%
+  mutate(FRic_Percent_Change = (FRic_Diff/fric.x)*100) %>%
+  mutate(FUn_Percent_Change = (FUn_Diff/fun.x)*100) %>%
+  mutate(FSp_Percent_Change = (FSp_Diff/fsp.x)*100)
+
+merged_data_RCP45ext_SR <- left_join(AqMap_Occ_map, RCP45_ext_Occ_map, by = c("Grid"))
+merged_data_RCP45ext_SR <- merged_data_RCP45ext_SR %>%
+  mutate(
+    CenterLat.y = coalesce(CenterLat.y, CenterLat.x),
+    CenterLong.y = coalesce(CenterLong.y, CenterLong.x),
+    Spp_Richn.y = coalesce(Spp_Richn.y, Spp_Richn.x)
+  ) 
+
+merged_data_RCP45ext_SR <- merged_data_RCP45ext_SR %>%
+  mutate(Spp_Richn_Diff = Spp_Richn.y - Spp_Richn.x)
+merged_data_RCP45ext_SR <- merged_data_RCP45ext_SR %>%
+  mutate(SR_Percent_Change = (Spp_Richn_Diff/Spp_Richn.x)*100)
+merged_data_RCP45ext_SR <- merged_data_RCP45ext_SR %>%
+  mutate(
+    Spp_Richn_Shift = case_when(
+      Spp_Richn_Diff > 0 ~ "Increase",
+      Spp_Richn_Diff == 0 ~ "No change",
+      Spp_Richn_Diff < 0 ~ "Decrease",
+      TRUE ~ NA_character_
+    )
+  )
+merged_data_RCP45ext_SR$Spp_Richn_Shift <- ordered(merged_data_RCP45ext_SR$Spp_Richn_Shift,levels=c("Decrease","No change","Increase"))
+
+# Generalise shifts
+merged_data_RCP45ext_FD <- merged_data_RCP45ext_FD %>%
+  mutate(
+    FRic_Shift = case_when(
+      FRic_Diff > 0 ~ "Increase",
+      FRic_Diff == 0 ~ "No change",
+      FRic_Diff < 0 ~ "Decrease",
+      TRUE ~ NA_character_
+    )) %>% 
+  mutate(
+    FUn_Shift = case_when(
+      FUn_Diff > 0 ~ "Increase",
+      FUn_Diff == 0 ~ "No change",
+      FUn_Diff < 0 ~ "Decrease",
+      TRUE ~ NA_character_
+    )) %>%  
+  mutate(
+    FSp_Shift = case_when(
+      FSp_Diff > 0 ~ "Increase",
+      FSp_Diff == 0 ~ "No change",
+      FSp_Diff < 0 ~ "Decrease",
+      TRUE ~ NA_character_
+    )
+  ) %>% 
+  na.omit()
+merged_data_RCP45ext_FD$FRic_Shift <- ordered(merged_data_RCP45ext_FD$FRic_Shift,levels=c("Decrease","Increase"))
+merged_data_RCP45ext_FD$FUn_Shift <- ordered(merged_data_RCP45ext_FD$FUn_Shift,levels=c("Decrease","Increase"))
+merged_data_RCP45ext_FD$FSp_Shift <- ordered(merged_data_RCP45ext_FD$FSp_Shift,levels=c("Decrease","Increase"))
+
+# Calculate proportions of shifts
+FRic_shift_summary <- merged_data_RCP45ext_FD %>%
+  group_by(FRic_Shift) %>%
+  summarise(Count = n()) %>%
+  mutate(Percentage = (Count / sum(Count)) * 100)
+
+# Calculate percentages for FUn_Shift
+FUn_shift_summary <- merged_data_RCP45ext_FD %>%
+  group_by(FUn_Shift) %>%
+  summarise(Count = n()) %>%
+  mutate(Percentage = (Count / sum(Count)) * 100)
+
+# Calculate percentages for FSp_Shift
+FSp_shift_summary <- merged_data_RCP45ext_FD %>%
+  group_by(FSp_Shift) %>%
+  summarise(Count = n()) %>%
+  mutate(Percentage = (Count / sum(Count)) * 100)
+
+# View results
+print(FRic_shift_summary)
+
+print(FUn_shift_summary)
+
+print(FSp_shift_summary)
+
+## Absolute shift
+RCP45_colors <- c("#e31a1c", "#ff7f00", "#ffffff", "#6a3d9a", "#1f78b4")
+SR_breaks <- c(-149,-75,0,1,37,74)
+FRic_breaks <- c(-0.8,-0.4,0,0.0000001,0.4,0.8)
+FUn_breaks <- c(-0.27, -0.13, 0, 0.0000000001, 0.16, 0.32)
+FSp_breaks <- c(-0.28, -0.14, 0, 0.00000001, 0.12, 0.23)
+
+Map_RCP45ext_Ab_sprich <- ggplot() +
+  geom_point(
+    data = merged_data_RCP45ext_SR,
+    aes(CenterLong.x, CenterLat.x, color = Spp_Richn_Diff),
+    size = 0.01,
+    alpha = 0.5,
+    inherit.aes = FALSE
+  ) +
+  geom_map(data = world, map = world,
+           aes(long, lat, map_id = region),
+           color = "black", fill = "lightgray", size = 0.2) +
+  scale_color_gradientn(
+    colors = RCP45_colors,
+    values = scales::rescale(SR_breaks, to = c(0, 1)),
+    limits = c(-149, 74),
+    breaks = c(-149, -75, 0, 37, 74),
+    name = expression(Delta ~ SR)
+  ) +
+  labs(title = "", x = "Longitude", y = "Latitude") +
+  scale_x_continuous(breaks = seq(-180, 180, by = 45)) +
+  scale_y_continuous(breaks = seq(-90, 90, by = 45)) +
+  theme_minimal() +
+  theme_bw() +
+  theme(
+    panel.grid = element_blank(),
+    panel.border = element_rect(fill = "transparent"),
+    legend.position = "right",
+    plot.title = element_text(hjust = 0.5)
+  )
+save(Map_RCP45ext_Ab_sprich, file = "C:/Users/2022207/Dropbox/Jack's PhD/Chapter 3. Future shark FD/Analyses/Final paper R codes/data/AquaMaps/RCP45ext_Spp_Rich_absolute.RData")
+
+Map_RCP45ext_Ab_fric <- ggplot() +
+  geom_point(
+    data = merged_data_RCP45ext_FD,
+    aes(CenterLong.x, CenterLat.y, color = FRic_Diff),
+    size = 0.01,
+    alpha = 0.5,
+    inherit.aes = FALSE
+  ) +
+  geom_map(data = world, map = world,
+           aes(long, lat, map_id = region),
+           color = "black", fill = "lightgray", size = 0.2) +
+  scale_color_gradientn(
+    colors = RCP45_colors,
+    values = scales::rescale(FRic_breaks, to = c(0, 1)),
+    limits = c(-0.8, 0.8),
+    breaks = c(-0.8, -0.4, 0, 0.4, 0.8),
+    labels = scales::label_number(accuracy = 0.01),
+    name = expression(Delta ~ FRic)
+  ) +
+  labs(title = "", x = "Longitude", y = "Latitude") +
+  scale_x_continuous(breaks = seq(-180, 180, by = 45)) +
+  scale_y_continuous(breaks = seq(-90, 90, by = 45)) +
+  theme_minimal() +
+  theme_bw() +
+  theme(
+    panel.grid = element_blank(),
+    panel.border = element_rect(fill = "transparent"),
+    legend.position = "right",
+    plot.title = element_text(hjust = 0.5)
+  )
+save(Map_RCP45ext_Ab_fric, file = "C:/Users/2022207/Dropbox/Jack's PhD/Chapter 3. Future shark FD/Analyses/Final paper R codes/data/AquaMaps/RCP45ext_FRic_absolute.RData")
+
+Map_RCP45ext_Ab_fun <- ggplot() +
+  geom_point(
+    data = merged_data_RCP45ext_FD,
+    aes(CenterLong.x, CenterLat.x, color = FUn_Diff),
+    size = 0.01,
+    alpha = 0.5,
+    inherit.aes = FALSE
+  ) +
+  geom_map(data = world, map = world,
+           aes(long, lat, map_id = region),
+           color = "black", fill = "lightgray", size = 0.2) +
+  scale_color_gradientn(
+    colors = RCP45_colors,
+    values = scales::rescale(FUn_breaks, to = c(0, 1)),
+    limits = c(-0.27, 0.32),
+    breaks = c(-0.27, -0.13, 0, 0.00000001, 0.16, 0.32),
+    labels = scales::label_number(accuracy = 0.01),
+    name = expression(Delta ~ FUn)
+  ) +
+  labs(title = "", x = "Longitude", y = "Latitude") +
+  scale_x_continuous(breaks = seq(-180, 180, by = 45)) +
+  scale_y_continuous(breaks = seq(-90, 90, by = 45)) +
+  theme_minimal() +
+  theme_bw() +
+  theme(
+    panel.grid = element_blank(),
+    panel.border = element_rect(fill = "transparent"),
+    legend.position = "right",
+    plot.title = element_text(hjust = 0.5)
+  )
+save(Map_RCP45ext_Ab_fun, file = "C:/Users/2022207/Dropbox/Jack's PhD/Chapter 3. Future shark FD/Analyses/Final paper R codes/data/AquaMaps/RCP45ext_FUn_absolute.RData")
+
+Map_RCP45ext_Ab_fsp <- ggplot() +
+  geom_point(
+    data = merged_data_RCP45ext_FD,
+    aes(CenterLong.y, CenterLat.y, color = FSp_Diff),
+    size = 0.01,
+    alpha = 0.5,
+    inherit.aes = FALSE
+  ) +
+  geom_map(data = world, map = world,
+           aes(long, lat, map_id = region),
+           color = "black", fill = "lightgray", size = 0.2) +
+  scale_color_gradientn(
+    colors = RCP45_colors,
+    values = scales::rescale(FSp_breaks, to = c(0, 1)),
+    limits = c(-0.28, 0.23),
+    breaks = c(-0.28, -0.14, 0, 0.00000001, 0.12, 0.23),
+    labels = scales::label_number(accuracy = 0.01),
+    name = expression(Delta ~ FSp)
+  ) +
+  labs(title = "", x = "Longitude", y = "Latitude") +
+  scale_x_continuous(breaks = seq(-180, 180, by = 45)) +
+  scale_y_continuous(breaks = seq(-90, 90, by = 45)) +
+  theme_minimal() +
+  theme_bw() +
+  theme(
+    panel.grid = element_blank(),
+    panel.border = element_rect(fill = "transparent"),
+    legend.position = "right",
+    plot.title = element_text(hjust = 0.5)
+  )
+save(Map_RCP45ext_Ab_fsp, file = "C:/Users/2022207/Dropbox/Jack's PhD/Chapter 3. Future shark FD/Analyses/Final paper R codes/data/AquaMaps/RCP45ext_FSp_absolute.RData")
+
+# Plot 4 maps together
+RCP45_extinctions_map_changes <- plot_grid(Map_RCP45ext_Ab_sprich, Map_RCP45ext_Ab_fric, Map_RCP45ext_Ab_fun, Map_RCP45ext_Ab_fsp,
+                                           labels = c("(a)", "(b)", "(c)", "(d)"), 
+                                           label_size = 12, align = "hv", label_fontface = "bold", nrow = 2, ncol = 2)
