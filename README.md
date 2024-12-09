@@ -45,6 +45,11 @@ install.packages("colorspace")
 install.packages("visreg")
 install.packages("lme4")
 ```
+## Folders
+All code and data are placed in the following folders:
+
+Code: containing all R scripts
+Data: containing all Rdata and xlsx inputs and outputs from the code. Rdata files can be loaded directly into replications of our analyses using the load() command
 
 ## Codes
 A total of 20 R scripts were produced containing all analyses. The scripts are as follows:
