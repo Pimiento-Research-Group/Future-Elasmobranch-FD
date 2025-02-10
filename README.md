@@ -1,7 +1,7 @@
 # R code for the analysis of: Temporal and spatial decline in functional diversity of sharks and rays under simulated extinctions
 
 ## Authors
-Jack A. Cooper, Gregor H. Mathes & Catalina Pimiento
+Jack A. Cooper, Gregor H. Mathes, John N. Griffin, Fabien Leprieur, Kristin Kaschner, Kathleen Kesner-Reyes & Catalina Pimiento
 
 ## Introduction
 This folder contains R scripts for all analyses exploring the future functional diversity of sharks and rays. 
