@@ -1,4 +1,4 @@
-# R code for the analysis of: Future impacts of overfishing and climate change on elasmobranch functional diversity
+# R code for the analysis of: Overfishing extinguishes climate change refugia for elasmobranch functional diversity
 
 ## Authors
 Jack A. Cooper, Gregor H. Mathes, John N. Griffin, Kristin Kaschner, Kathleen Kesner-Reyes, Fabien Leprieur & Catalina Pimiento
