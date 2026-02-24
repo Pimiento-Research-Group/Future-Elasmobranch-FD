@@ -23,7 +23,7 @@ library(doParallel)
 library(ggplotify)
 
 ## Load Aquamaps and isolate species list
-AqMap <- read_csv("C:/Users/Jack Cooper/Dropbox/Jack's PhD/Chapter 3. Future shark FD/Data/Aquamaps data/Elasmo_current.csv")
+AqMap <- read_csv("~/Elasmo_current.csv")
 
 AqMap <- AqMap %>% 
   mutate(sci_name = paste(Genus, Species, sep = " "))
@@ -33,7 +33,7 @@ AqMapSpp <- AqMap %>%
   unique()
 
 # Load synonyms and correct
-Synonyms <- read_xlsx("C:/Users/Jack Cooper/Dropbox/Jack's PhD/Chapter 3. Future shark FD/Analyses/DatasetSynonyms.xlsx")
+Synonyms <- read_xlsx("~/DatasetSynonyms.xlsx")
 
 AqMap <- AqMap %>%
   left_join(Synonyms, by = c("sci_name" = "Aquamaps_name")) %>%
@@ -48,7 +48,7 @@ AqMapSpp <- AqMapSpp %>%
   distinct(sci_name, .keep_all = TRUE)
 
 # Load data
-load(file="C:/Users/Jack Cooper/Documents/iucn/Data.RData")
+load(file="~/Data.RData")
 
 # Occurrence data
 Occ <- data %>% 
@@ -412,3 +412,4 @@ plot_FUSE_rank_lollipop <- ggplot(
 Fig_S5 <- plot_grid(Fig_S5a,plot_FUSE_rank_lollipop,
                     labels = c("","C"),
                     label_size = 12,align = "hv", label_fontface = "bold", hjust = -0.15,  nrow=1)
+
