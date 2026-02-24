@@ -15,15 +15,15 @@ library(purrr)
 library(doParallel)
 
 # Source functions
-source("C:/Users/2022207/Dropbox/Jack's PhD/Chapter 3. Future shark FD/Analyses/R code/Final pipeline R code/Functions/get_indicator_function 2.R")
-source("C:/Users/2022207/Dropbox/Jack's PhD/Chapter 3. Future shark FD/Analyses/R code/Final pipeline R code/Functions/fonction_FRIC_Global_full.R")
+source("~/get_indicator_function 2.R")
+source("~/fonction_FRIC_Global_full.R")
 
 # Load data
-load(file="C:/Users/Jack Cooper/Documents/iucn/Data.RData")
+load(file="~/Data.RData")
 # Load median results for spatial results
-load(file = "C:/Users/Jack Cooper/Documents/iucn/iucn_sim/iucn_data/CritE_median_D24.RData")
+load(file = "~/CritE_median_D24.RData")
 # Load extinction times corrected for synonyms
-load(file = "C:/Users/Jack Cooper/Documents/iucn/iucn_sim/iucn_data/Extinction_times.RData")
+load(file = "~/Extinction_times.RData")
 
 # Parallelised loop
 registerDoParallel(cores = 5)
@@ -162,8 +162,9 @@ res_df_null <- res.null %>%
 # Format and save results
 Null_FDmetrics_taxonvar.CritE<- res_df_null %>% 
   select(Scenario:fun)
-save(Null_FDmetrics_taxonvar.CritE, file = "C:/Users/Jack Cooper/Documents/iucn/iucn_sim/Crit E analyses/Null_wide_CritE.RData")
+save(Null_FDmetrics_taxonvar.CritE, file = "~/Null_wide_CritE.RData")
 
 # Melt data
 FDmetrics_null_long_taxonvar.CritE<- melt(Null_FDmetrics_taxonvar.CritE, id.vars= "Scenario")
-save(FDmetrics_null_long_taxonvar.CritE, file = "C:/Users/Jack Cooper/Documents/iucn/iucn_sim/Crit E analyses/Null_long_CritE.RData")
+save(FDmetrics_null_long_taxonvar.CritE, file = "~/Null_long_CritE.RData")
+
