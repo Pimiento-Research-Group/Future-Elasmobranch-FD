@@ -48,6 +48,8 @@ Code: containing all R scripts
 
 Data: containing Rdata and xlsx inputs and outputs from the code. Rdata files can be loaded directly into replications of our analyses using the load() command
 
+Functions: containing 2 functions used for all functional diversity calculations
+
 ## Codes
 A total of 13 R scripts were produced containing all analyses. A sub-folder of codes for individual trait-removal sensitivity tests is also included. The scripts in the main folder are as follows:
 
