@@ -15,10 +15,10 @@ library(tibble)
 library(here)
 
 # Load species and iucn data
-load(file = "C:/Users/Jack Cooper/Dropbox/Jack's PhD/Chapter 3. Future shark FD/Data/R data/Species_list_IUCN.RData")
+load(file = "~/Species_list_IUCN.RData")
 
 ## Load python functions from IUCN_sim into R
-reticulate::source_python(here("C:/Users/Jack Cooper/Dropbox/Jack's PhD/Chapter 3. Future shark FD/IUCN_sim/iucn_sim.py"))
+reticulate::source_python(here("~/iucn_sim.py"))
 
 # set reference group and define iucn key
 reference_group = "Chondrichthyes"
@@ -26,7 +26,7 @@ reference_rank = "class"
 iucn_key="1fecbeea639ba430f60510af483c5d4b282e3f097aa98e4613003c9903970df6"
 
 ## Download IUCN history of reference group
-outdir = "C:/Users/Jack Cooper/Documents/iucn/iucn_sim/iucn_data" # define where you want the output files to be stored
+outdir = "~/iucn_data" # define where you want the output files to be stored
 
 # get iucn history of reference group, will be written to file
 iucn_history_file = get_iucn_history(reference_group=reference_group,
@@ -35,10 +35,10 @@ iucn_history_file = get_iucn_history(reference_group=reference_group,
                                      outdir=outdir)
 
 # Import IUCN_history 
-IUCN_history <- read.table("C:/Users/Jack Cooper/Documents/iucn/iucn_sim/iucn_data\\CHONDRICHTHYES_iucn_history.txt", header = TRUE, sep = "\t")
+IUCN_history <- read.table("~\\CHONDRICHTHYES_iucn_history.txt", header = TRUE, sep = "\t")
 
 # Download IUCN history from Dulvy et al. 2024 and convert to history file
-D24_hist <- read_xlsx("C:/Users/Jack Cooper/Dropbox/Jack's PhD (1)/Chapter 3. Future shark FD/Data/Dulvy_2024.xlsx")
+D24_hist <- read_xlsx("~/Dulvy_2024.xlsx")
 
 # Isolate species and IUCN history from Dulvy et al. 2024
 IUCN_D24 <- D24_hist %>%
@@ -75,13 +75,13 @@ names(IUCN_D24_sub) <- sub("^y", "", names(IUCN_D24))
 IUCN_D24_final <- IUCN_D24_sub
 
 # Specify the file path for the new file
-output_file <- "C:/Users/Jack Cooper/Documents/iucn/iucn_sim/iucn_data\\IUCN_final_Dulvy2024.txt"
+output_file <- "~\\IUCN_final_Dulvy2024.txt"
 
 # Write the data frame to a tab-separated text file
 write.table(IUCN_D24_final, output_file, sep = "\t", quote = FALSE, row.names = FALSE)
 
 # Import IUCN history
-IUCN_history_final <- "C:/Users/Jack Cooper/Documents/iucn/iucn_sim/iucn_data\\IUCN_final_Dulvy2024.txt"
+IUCN_history_final <- "~\\IUCN_final_Dulvy2024.txt"
 
 ## Get IUCN history transitions
 counted_status_transition_events = evaluate_iucn_history(IUCN_history_final)
@@ -104,7 +104,7 @@ extant_taxa_current_status <- species_iucn_updated_fixed %>%
   select(species, y2023, everything())
 
 # Estimate status transition rates
-outdir = "C:/Users/Jack Cooper/Documents/iucn/iucn_sim/iucn_data/transition_rates_D24_CritE"
+outdir = "~/transition_rates_D24_CritE"
 transition_rates_out = estimate_transition_rates(extant_taxa_current_status,
                                                  IUCN_history_final,
                                                  outdir,
@@ -114,7 +114,7 @@ transition_rates_out = estimate_transition_rates(extant_taxa_current_status,
 
 # Simulate future (next 1000 years; 77 years = 2100)
 ## Extract future status of species
-outdir = "C:/Users/Jack Cooper/Documents/iucn/iucn_sim/iucn_data/future_simulations_future_status_D24_CritE"
+outdir = "~/future_simulations_future_status_D24_CritE"
 sim_years = 1000
 # Run simulations (supercomputer)
 future_sim_output = run_future_sim(transition_rates_out,
@@ -141,7 +141,7 @@ ext_rates = estimate_extinction_rates(extinction_times.CritE,
                                       load_from_file=FALSE)
 
 # Produce a dataframe to determine which species are extinct in the future
-dat.ext <- read_delim("C:/Users/Jack Cooper/Documents/iucn/iucn_sim/iucn_data/future_simulations_future_status_D24_CritE/te_all_species.txt")
+dat.ext <- read_delim("~/te_all_species.txt")
 
 # Make dat.ext a dataframe & tidy
 ext.df <- dat.ext %>% as.data.frame()
@@ -172,10 +172,11 @@ ext.times.median <- ext.df1 %>%
 # Rename column for clarity
 Spp_median.CritE <- ext.times.median %>%
   rename(Species = `Acroteriobatus annulatus`)
-save(Spp_median.CritE,file = "C:/Users/Jack Cooper/Documents/iucn/iucn_sim/iucn_data/CritE_median_D24.RData")
+save(Spp_median.CritE,file = "~/CritE_median_D24.RData")
 
 # Filter out rows where the median is under 77 - identifies species extinct by 2100 
 extinct_spp_2100.CritE <- ext.times.median %>%
   filter(median < 77) %>%
   rename(Species = `Acroteriobatus annulatus`)
-save(extinct_spp_2100.CritE,file = "C:/Users/Jack Cooper/Documents/iucn/iucn_sim/iucn_data/CritE_2100_extinct_species_D24.RData")
+save(extinct_spp_2100.CritE,file = "~/CritE_2100_extinct_species_D24.RData")
+
