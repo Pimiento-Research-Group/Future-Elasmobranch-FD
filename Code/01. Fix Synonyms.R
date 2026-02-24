@@ -17,7 +17,7 @@ Sys.getenv("IUCN_KEY")
 apikey <- Sys.getenv("IUCN_KEY") # needed to access rredlist package
 
 # Load species names downloaded from IUCN
-species <- read_xlsx("C:/Users/2022207/Dropbox/Jack's PhD/Chapter 3. Future shark FD/Analyses/IUCN_sim/Species_iucn.xlsx")
+species <- read_xlsx("~/Species_iucn.xlsx")
 
 # Get IUCN info from downloaded species
 species_iucn<-species %>%
@@ -81,7 +81,7 @@ species_iucn_updated_fixed <- species_iucn_updated %>%
 
 # add missing species from trait dataset
 # load look up table with synonyms
-all.names <-read_xlsx("C:/Users/2022207/Dropbox/Jack's PhD/Chapter 3. Future shark FD/Analyses/Lookup_Taxonomy.xlsx", 
+all.names <-read_xlsx("~/Lookup_Taxonomy.xlsx", 
                       sheet = "Species") %>%
   dplyr::select(-Family, -Order, -Superorder)
 
@@ -193,7 +193,7 @@ species_iucn_updated_fixed <- species_iucn_updated_fixed %>%
            !Species%in%chim4 & !Species%in%chim5 & !Species%in%chim6)
 
 # Check that your species are all within the list of Dulvy et al. 2021
-Dulvy <- read_xlsx("C:/Users/2022207/Dropbox/Jack's PhD/Chapter 3. Future shark FD/Data/Dulvy_2021.xlsx")
+Dulvy <- read_xlsx("~/Dulvy_2021.xlsx")
 
 missing_species <- setdiff(species_iucn_updated_fixed$Species, Dulvy$`Latin binomial`)
 
@@ -234,4 +234,5 @@ if (length(missing_species_synonyms) > 0) {
 }
 
 # Save final data for use in simulations and FD analyses
-save(species_iucn_updated_fixed,file = "C:/Users/2022207/Dropbox/Jack's PhD/Chapter 3. Future shark FD/Data/R data/Species_list_IUCN.RData")
+
+save(species_iucn_updated_fixed,file = "~/Species_list_IUCN.RData")
