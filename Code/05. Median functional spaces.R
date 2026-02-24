@@ -19,12 +19,12 @@ library(data.table)
 library(geometry)
 
 # Load data
-load(file="C:/Users/Jack Cooper/Documents/iucn/Data.RData")
+load(file="~/Data.RData")
 # Load median results for spatial results
-load(file = "C:/Users/Jack Cooper/Documents/iucn/iucn_sim/iucn_data/CritE_median_D24.RData")
+load(file = "~/CritE_median_D24.RData")
 
 # Load and correct synonyms
-Synonyms <- read_xlsx("C:/Users/Jack Cooper/Dropbox/Jack's PhD/Chapter 3. Future shark FD/Analyses/DatasetSynonyms.xlsx")
+Synonyms <- read_xlsx("~/DatasetSynonyms.xlsx")
 
 Spp_median.CritE <- Spp_median.CritE %>%
   left_join(Synonyms, by = c("Species" = "iucnsim_name")) %>%
@@ -33,8 +33,8 @@ Spp_median.CritE <- Spp_median.CritE %>%
   distinct(Species, .keep_all = TRUE)
 
 # Source functions
-source("C:/Users/2022207/Dropbox/Jack's PhD/Chapter 3. Future shark FD/Analyses/R code/Final pipeline R code/Functions/get_indicator_function 2.R")
-source("C:/Users/2022207/Dropbox/Jack's PhD/Chapter 3. Future shark FD/Analyses/R code/Final pipeline R code/Functions/fonction_FRIC_Global_full.R")
+source("~/get_indicator_function 2.R")
+source("~/fonction_FRIC_Global_full.R")
 
 ### Crit E EX mode 
 # Make future functional space
@@ -157,7 +157,7 @@ FDindices_taxon.CritE$Scenario <- ordered(FDindices_taxon.CritE$Scenario,
                                     levels=c("Present","Future"))
 
 # Save future FD results for plotting
-save(FDindices_taxon.CritE, file = "C:/Users/Jack Cooper/Documents/iucn/iucn_sim/Crit E analyses/CritE_FD.RData")
+save(FDindices_taxon.CritE, file = "~/CritE_FD.RData")
 
 # Form future functional spaces
 # mFD FRic for plotting (identical to results above)
@@ -264,4 +264,5 @@ legend_plot <- ggplot() +
 legend <- get_legend(legend_plot)
 
 # Produce final figure
+
 final_FigS4a <- plot_grid(legend, Sup_Fig2a, ncol = 1, rel_heights = c(0.1, 1))
