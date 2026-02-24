@@ -14,10 +14,10 @@ library(RColorBrewer)
 library(purrr)
 
 # Load boxplots and null model
-load(file = "C:/Users/Jack Cooper/Documents/iucn/iucn_sim/Crit E analyses/CritE_full_buffer.RData")
-load(file = "C:/Users/Jack Cooper/Documents/iucn/iucn_sim/Crit E analyses/CritE_full_long_buffer.RData")
-load(file = "C:/Users/Jack Cooper/Documents/iucn/iucn_sim/Crit E analyses/Null_wide_CritE.RData")
-load(file = "C:/Users/Jack Cooper/Documents/iucn/iucn_sim/Crit E analyses/Null_long_CritE.RData")
+load(file = "~/CritE_full_buffer.RData")
+load(file = "~/CritE_full_long_buffer.RData")
+load(file = "~/Null_wide_CritE.RData")
+load(file = "~/Null_long_CritE.RData")
 
 ## Calculate % changes for empirical, buffer and null in species & functional diversity - Crit E EX mode
 # Empirical
@@ -434,3 +434,4 @@ FRic_combined <- ggplot() +
     panel.grid = element_blank(),
     panel.border = element_rect(fill = "transparent")
   )
+
