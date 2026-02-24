@@ -14,10 +14,10 @@ library(RColorBrewer)
 library(purrr)
 
 # Load boxplots and null model
-load(file = "C:/Users/Jack Cooper/Documents/iucn/iucn_sim/Crit E analyses/CritE_full_buffer.RData")
-load(file = "C:/Users/Jack Cooper/Documents/iucn/iucn_sim/Crit E analyses/CritE_full_long_buffer.RData")
-load(file = "C:/Users/Jack Cooper/Documents/iucn/iucn_sim/Crit E analyses/Null_wide_CritE.RData")
-load(file = "C:/Users/Jack Cooper/Documents/iucn/iucn_sim/Crit E analyses/Null_long_CritE.RData")
+load(file = "~/CritE_full_buffer.RData")
+load(file = "~/CritE_full_long_buffer.RData")
+load(file = "~/Null_wide_CritE.RData")
+load(file = "~/Null_long_CritE.RData")
 
 ## Calculate % changes in species & functional diversity - Crit E EX mode
 FDindices_taxon.CritE_long <- melt(FDmetrics_taxonvar.CritE, id.vars= "Scenario")
@@ -75,7 +75,7 @@ Spp_CritE_2100 <- ggplot(data = FDmetrics_Spp_2100, aes(x = Scenario, y = percen
     panel.border = element_rect(fill = "transparent"),
     plot.title = element_text(hjust = 0.5, size = 10)
   )
-save(Spp_CritE_2100, file = "C:/Users/Jack Cooper/Documents/iucn/iucn_sim/Crit E analyses/Spp_2100.RData")
+save(Spp_CritE_2100, file = "~/Spp_2100.RData")
 
 # Plot 2: Functional Richness (FRic) - 2100 only
 FRic_CritE_2100 <- ggplot(data = FRicmetrics_null_2100, aes(x = Scenario, y = percent_change)) +
@@ -96,7 +96,7 @@ FRic_CritE_2100 <- ggplot(data = FRicmetrics_null_2100, aes(x = Scenario, y = pe
     panel.border = element_rect(fill = "transparent"),
     plot.title = element_text(hjust = 0.5, size = 10)
   )
-save(FRic_CritE_2100, file = "C:/Users/Jack Cooper/Documents/iucn/iucn_sim/Crit E analyses/FRic_2100.RData")
+save(FRic_CritE_2100, file = "~/FRic_2100.RData")
 
 # Wilcoxon signed-ranked tests
 perform_wilcoxon_extended <- function(empirical_data, null_data, scenario_name, 
@@ -185,5 +185,6 @@ FRic_results <- perform_wilcoxon_extended(
   scenario_name = "Future",
   alternative = "two.sided"
 )
+
 
 print(FRic_results)
