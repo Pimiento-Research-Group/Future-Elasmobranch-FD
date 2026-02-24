@@ -30,12 +30,12 @@ library(parallel)
 library(doParallel)
 
 # Source functions
-source("C:/Users/2022207/Dropbox/Jack's PhD/Chapter 3. Future shark FD/Analyses/R code/Final pipeline R code/Functions/get_indicator_function 2.R")
-source("C:/Users/2022207/Dropbox/Jack's PhD/Chapter 3. Future shark FD/Analyses/R code/Final pipeline R code/Functions/fonction_FRIC_Global_full.R")
+source("~/get_indicator_function 2.R")
+source("~/fonction_FRIC_Global_full.R")
 
 # Load & save trait data
 data <- read_xlsx(
-  path = "C:/Users/Jack Cooper/Dropbox/Jack's PhD (1)/Chapter 3. Future shark FD/Data/Trait data.xlsx",
+  path = "~/Trait data.xlsx",
   sheet = 4)
 
 data <- data %>%
@@ -62,15 +62,15 @@ data <- data %>%
                      ordered = TRUE)
   )
 
-save(data, file="C:/Users/Jack Cooper/Documents/iucn/Data.RData")
+save(data, file="~/Data.RData")
 
 # Load median results for spatial results
-load(file = "C:/Users/Jack Cooper/Documents/iucn/iucn_sim/iucn_data/CritE_median_D24.RData")
+load(file = "~/CritE_median_D24.RData")
 # Load synonyms for matching up names in loop
-Synonyms <- read_xlsx("C:/Users/Jack Cooper/Dropbox/Jack's PhD/Chapter 3. Future shark FD/Analyses/DatasetSynonyms.xlsx")
+Synonyms <- read_xlsx("~/DatasetSynonyms.xlsx")
 
 # Produce a dataframe to determine which species are extinct in the future
-dat.ext <- read_delim("C:/Users/Jack Cooper/Documents/iucn/iucn_sim/iucn_data/future_simulations_future_status_D24_CritE/te_all_species.txt")
+dat.ext <- read_delim("~/te_all_species.txt")
 
 # Make dat.ext a dataframe & tidy
 ext.df <- dat.ext %>% as.data.frame()
@@ -112,7 +112,7 @@ dat_ext <- ext.df1 %>%
   mutate(across(-Species, as.double))
 
 # Save corrected synonym data to be used in null analyses
-save(dat_ext,file = "C:/Users/Jack Cooper/Documents/iucn/iucn_sim/iucn_data/Extinction_times.RData")
+save(dat_ext,file = "~/Extinction_times.RData")
 
 # Parallelised loop
 registerDoParallel(cores = 8)
@@ -249,7 +249,8 @@ res_df <- res.TaxonVar %>%
 # Format and save results
 FDmetrics_taxonvar.CritE<- res_df %>% 
   select(Scenario:fun)
-save(FDmetrics_taxonvar.CritE,file = "C:/Users/Jack Cooper/Documents/iucn/iucn_sim/Crit E analyses/CritE_full_buffer.RData")
+save(FDmetrics_taxonvar.CritE,file = "~/CritE_full_buffer.RData")
 
 FDmetrics_long_TaxonVar.CritE<- melt(FDmetrics_taxonvar.CritE, id.vars= "Scenario")
-save(FDmetrics_long_TaxonVar.CritE,file = "C:/Users/Jack Cooper/Documents/iucn/iucn_sim/Crit E analyses/CritE_full_long_buffer.RData")
+save(FDmetrics_long_TaxonVar.CritE,file = "~/CritE_full_long_buffer.RData")
+
