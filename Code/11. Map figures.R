@@ -33,12 +33,12 @@ gmap <- ggplot() +
         panel.border = element_rect(fill = "transparent"))
 
 # Load map dataframes
-load(file="C:/Users/Jack Cooper/Documents/iucn/iucn_sim/Maps/FRic_map_present.RData")
-load(file="C:/Users/Jack Cooper/Documents/iucn/iucn_sim/Maps/FRic_map_RCP45.RData")
-load(file="C:/Users/Jack Cooper/Documents/iucn/iucn_sim/Maps/FRic_map_RCP45ext.RData")
-load(file="C:/Users/Jack Cooper/Documents/iucn/iucn_sim/Maps/SR_map_present.RData")
-load(file="C:/Users/Jack Cooper/Documents/iucn/iucn_sim/Maps/SR_map_RCP45.RData")
-load(file="C:/Users/Jack Cooper/Documents/iucn/iucn_sim/Maps/SR_map_RCP45ext.RData")
+load(file="~/FRic_map_present.RData")
+load(file="~/FRic_map_RCP45.RData")
+load(file="~/FRic_map_RCP45ext.RData")
+load(file="~/SR_map_present.RData")
+load(file="~/SR_map_RCP45.RData")
+load(file="~/SR_map_RCP45ext.RData")
 
 # Plot raw value maps (SR and FRic)
 ## Present day
@@ -215,7 +215,7 @@ FD_shift_RCP45 <- FD_AqMap %>%
   select(Grid, CenterLat_present, CenterLong_present, SR_shift, FRic_shift) %>%
   rename(CenterLat = CenterLat_present, CenterLong = CenterLong_present) %>% 
   na.omit()
-save(FD_shift_RCP45,file="C:/Users/Jack Cooper/Documents/iucn/iucn_sim/Maps/RCP45_shifts.RData")
+save(FD_shift_RCP45,file="~/RCP45_shifts.RData")
 
 # Calculate shifts under RCP 4.5 (climate change) + extinctions
 FD_shift_RCP45ext <- FD_AqMap %>%
@@ -227,7 +227,7 @@ FD_shift_RCP45ext <- FD_AqMap %>%
   select(Grid, CenterLat_present, CenterLong_present, SR_shift, FRic_shift) %>%
   rename(CenterLat = CenterLat_present, CenterLong = CenterLong_present) %>% 
   na.omit()
-save(FD_shift_RCP45ext,file="C:/Users/Jack Cooper/Documents/iucn/iucn_sim/Maps/RCP45ext_shifts.RData")
+save(FD_shift_RCP45ext,file="~/RCP45ext_shifts.RData")
 
 # Calculate grid changes under both scenarios
 sr_shift_RCP45 <- FD_shift_RCP45 %>%
@@ -304,7 +304,7 @@ Lat_RCP45ext_FD <- FD_shift_RCP45ext %>%
 Lat_RCP45_FD$Scenario <- "RCP 4.5"
 Lat_RCP45ext_FD$Scenario <- "RCP 4.5 + Extinctions"
 combined_RCP45_FD <- rbind(Lat_RCP45_FD, Lat_RCP45ext_FD)
-save(combined_RCP45_FD,file="C:/Users/Jack Cooper/Documents/iucn/iucn_sim/Maps/RCP45_latitudinal_gradients.RData")
+save(combined_RCP45_FD,file="~/RCP45_latitudinal_gradients.RData")
 
 ## Plot SR changes
 SR_RCP45 <- ggplot(combined_RCP45_FD, aes(x = CenterLat, y = median_value_SR, color = Scenario, fill = Scenario)) +
@@ -335,7 +335,7 @@ SR_RCP45 <- ggplot(combined_RCP45_FD, aes(x = CenterLat, y = median_value_SR, co
     labels = c("RCP 4.5" = "Climate change", "RCP 4.5 + Extinctions" = "Climate change + extinctions")
   )+
   guides(color = guide_legend(nrow = 2), fill = guide_legend(nrow = 2))
-save(SR_RCP45,file="C:/Users/Jack Cooper/Documents/iucn/iucn_sim/Maps/RCP45_latitudinal_gradients_SR.RData")
+save(SR_RCP45,file="~/RCP45_latitudinal_gradients_SR.RData")
 
 ## Plot FRic changes
 FRic_RCP45 <- ggplot(combined_RCP45_FD, aes(x = CenterLat, y = median_value_FRic, color = Scenario, fill = Scenario)) +
@@ -366,7 +366,7 @@ FRic_RCP45 <- ggplot(combined_RCP45_FD, aes(x = CenterLat, y = median_value_FRic
     labels = c("RCP 4.5" = "Climate change", "RCP 4.5 + Extinctions" = "Climate change + extinctions")
   )+
   guides(color = guide_legend(nrow = 2), fill = guide_legend(nrow = 2))
-save(FRic_RCP45,file="C:/Users/Jack Cooper/Documents/iucn/iucn_sim/Maps/RCP45_latitudinal_gradients_FRic.RData")
+save(FRic_RCP45,file="~/RCP45_latitudinal_gradients_FRic.RData")
 
 # Plot and save all maps so far
 ## Set breaks and colours for plots
@@ -375,8 +375,8 @@ SR_breaks <- c(-86,-43,0,1,37,74)
 FRic_breaks <- c(-0.5,-0.25,0,0.0000001,0.16,0.33)
 
 ## Shift maps - Figure 1
-load(file = "C:/Users/Jack Cooper/Documents/iucn/iucn_sim/Crit E analyses/Spp_2100.RData")
-load(file = "C:/Users/Jack Cooper/Documents/iucn/iucn_sim/Crit E analyses/FRic_2100.RData")
+load(file = "~/Spp_2100.RData")
+load(file = "~/FRic_2100.RData")
 
 ## Climate change shifts
 RCP45_SR_shift <- ggplot() +
@@ -408,7 +408,7 @@ RCP45_SR_shift <- ggplot() +
     legend.position = "",
     plot.title = element_text(hjust = 0.5, size = 10)
   )
-save(RCP45_SR_shift,file="C:/Users/Jack Cooper/Documents/iucn/iucn_sim/Maps/RCP45_SR_shift_map.RData")
+save(RCP45_SR_shift,file="~/RCP45_SR_shift_map.RData")
 
 RCP45_FRic_shift <- ggplot() +
   geom_point(
@@ -440,7 +440,7 @@ RCP45_FRic_shift <- ggplot() +
     legend.position = "",
     plot.title = element_text(hjust = 0.5, size = 10)
   )
-save(RCP45_FRic_shift,file="C:/Users/Jack Cooper/Documents/iucn/iucn_sim/Maps/RCP45_FRic_shift_map.RData")
+save(RCP45_FRic_shift,file="~/RCP45_FRic_shift_map.RData")
 
 ## Climate change + extinction shifts
 RCP45ext_SR_shift <- ggplot() +
@@ -473,7 +473,7 @@ RCP45ext_SR_shift <- ggplot() +
     plot.title = element_text(hjust = 0.5, size = 10)
   ) +
   theme(legend.key.width = unit(1, "cm"))
-save(RCP45ext_SR_shift,file="C:/Users/Jack Cooper/Documents/iucn/iucn_sim/Maps/RCP45ext_SR_shift_map.RData")
+save(RCP45ext_SR_shift,file="~/RCP45ext_SR_shift_map.RData")
 
 RCP45ext_FRic_shift <- ggplot() +
   geom_point(
@@ -506,7 +506,7 @@ RCP45ext_FRic_shift <- ggplot() +
     plot.title = element_text(hjust = 0.5, size = 10)
   ) +
   theme(legend.key.width = unit(1, "cm"))
-save(RCP45ext_FRic_shift,file="C:/Users/Jack Cooper/Documents/iucn/iucn_sim/Maps/RCP45ext_FRic_shift_map.RData")
+save(RCP45ext_FRic_shift,file="~/RCP45ext_FRic_shift_map.RData")
 
 # Plot Figure 1
 row1 <- plot_grid(
@@ -601,7 +601,7 @@ Map_FRic_Hotspots_RCP45 <- ggplot() +
     legend.position = "",
     plot.title = element_text(hjust = 0.5, size = 10)
   )
-save(Map_FRic_Hotspots_RCP45,file="C:/Users/Jack Cooper/Documents/iucn/iucn_sim/Maps/RCP45_hotspots_map.RData")
+save(Map_FRic_Hotspots_RCP45,file="~/RCP45_hotspots_map.RData")
 
 # Plot results (climate change + extinctions - Figure 2b)
 Map_FRic_Hotspots_RCP45ext <- ggplot() +
@@ -624,7 +624,7 @@ Map_FRic_Hotspots_RCP45ext <- ggplot() +
     legend.position = "",
     plot.title = element_text(hjust = 0.5, size = 10)
   )
-save(Map_FRic_Hotspots_RCP45ext,file="C:/Users/Jack Cooper/Documents/iucn/iucn_sim/Maps/RCP45ext_hotspots_map.RData")
+save(Map_FRic_Hotspots_RCP45ext,file="~/RCP45ext_hotspots_map.RData")
 
 # Form Figure 2
 ## Make shared legend
@@ -661,3 +661,4 @@ final_plot <- plot_grid(
   ncol = 1,
   rel_heights = c(1, 0.08)  # Adjust if more space is needed
 )
+
