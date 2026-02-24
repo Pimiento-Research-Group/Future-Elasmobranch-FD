@@ -18,12 +18,12 @@ library(progress)
 library(geometry)
 
 # Source functions
-source("C:/Users/2022207/Dropbox/Jack's PhD/Chapter 3. Future shark FD/Analyses/R code/Final pipeline R code/Functions/get_indicator_function 2.R")
-source("C:/Users/2022207/Dropbox/Jack's PhD/Chapter 3. Future shark FD/Analyses/R code/Final pipeline R code/Functions/fonction_FRIC_Global_full.R")
+source("~/get_indicator_function 2.R")
+source("~/fonction_FRIC_Global_full.R")
 
 ## 1. Load all data
 # Load data
-load(file="C:/Users/Jack Cooper/Documents/iucn/Data.RData")
+load(file="~/Data.RData")
 
 # Trait type matrix
 sharks_traits_cat <- tibble(trait_name = c("habitat","vertical","terrestriality","thermo","feeding",
@@ -31,10 +31,10 @@ sharks_traits_cat <- tibble(trait_name = c("habitat","vertical","terrestriality"
                             trait_type = c("N", "N", "O", "O", "O", "N", "Q", "N", "N", "N"))
 
 # Load median IUCN_sim results - Crit E
-load(file = "C:/Users/Jack Cooper/Documents/iucn/iucn_sim/iucn_data/CritE_median_D24.RData")
+load(file = "~/CritE_median_D24.RData")
 
 # Load synonyms and correct
-Synonyms <- read_xlsx("C:/Users/Jack Cooper/Dropbox/Jack's PhD/Chapter 3. Future shark FD/Analyses/DatasetSynonyms.xlsx")
+Synonyms <- read_xlsx("~/DatasetSynonyms.xlsx")
 
 Spp_median.CritE <- Spp_median.CritE %>%
   left_join(Synonyms, by = c("Species" = "iucnsim_name")) %>%
@@ -43,7 +43,7 @@ Spp_median.CritE <- Spp_median.CritE %>%
   distinct(Species, .keep_all = TRUE)
 
 # Load Present-day AquaMaps data & correct for synonymns
-AqMap <- read_csv("C:/Users/Jack Cooper/Dropbox/Jack's PhD/Chapter 3. Future shark FD/Data/Aquamaps data/Elasmo_current.csv")
+AqMap <- read_csv("~/Elasmo_current.csv")
 
 AqMap <- AqMap %>% 
   mutate(sci_name = paste(Genus, Species, sep = " "))
@@ -65,7 +65,7 @@ AqMap_Occ <- AqMap_filtered %>%
 save(AqMap_Occ,file="C:/Users/Jack Cooper/Documents/iucn/iucn_sim/Maps/AqMap_Occ.RData")
 
 # Load RCP 4.5 AquaMaps data & correct for synonymns
-RCP45 <- read_csv("C:/Users/Jack Cooper/Dropbox/Jack's PhD/Chapter 3. Future shark FD/Data/Aquamaps data/Elasmo_rcp45_2100.csv") 
+RCP45 <- read_csv("~/Elasmo_rcp45_2100.csv") 
 
 RCP45 <- RCP45 %>% 
   mutate(sci_name = paste(Genus, Species, sep = " "))
@@ -96,7 +96,7 @@ traits_filtered <- traits %>%
 sharks_traits <- traits_filtered %>% 
   remove_rownames %>% 
   column_to_rownames(var="Species")
-save(sharks_traits,file="C:/Users/Jack Cooper/Documents/iucn/iucn_sim/Maps/AquaMaps_trait matrix.RData")
+save(sharks_traits,file="~/AquaMaps_trait matrix.RData")
 
 ## 3. Run PCoA analyses
 # Summarise dataset
@@ -114,7 +114,7 @@ sp_dist_sharks <- mFD::funct.dist(
   ordinal_var   = "classic",
   weight_type   = "equal",
   stop_if_NA    = TRUE)
-save(sp_dist_sharks,file="C:/Users/Jack Cooper/Documents/iucn/iucn_sim/Maps/AquaMaps_sp_dist_matrix.RData")
+save(sp_dist_sharks,file="~/AquaMaps_sp_dist_matrix.RData")
 
 # Assess quality
 fspaces_quality_sharks <- mFD::quality.fspaces(
@@ -126,7 +126,7 @@ fspaces_quality_sharks <- mFD::quality.fspaces(
 
 # Return coordinates of each axis
 sp_faxes_coord_sharksAqMap <- fspaces_quality_sharks$"details_fspaces"$"sp_pc_coord"
-save(sp_faxes_coord_sharksAqMap,file="C:/Users/Jack Cooper/Documents/iucn/iucn_sim/Maps/AquaMaps_pcoa_coordinates.RData")
+save(sp_faxes_coord_sharksAqMap,file="~/AquaMaps_pcoa_coordinates.RData")
 
 # Form final inputs for FD analyses
 pcoa <- list(li = sp_faxes_coord_sharksAqMap)
@@ -154,7 +154,7 @@ baskets_AqMaps_weights <- baskets_AqMap %>%
 
 baskets_sharks_weightsAqMap <- data.matrix(baskets_AqMaps_weights, rownames.force = NA)
 class(baskets_sharks_weightsAqMap) <- "numeric"
-save(baskets_sharks_weightsAqMap,file="C:/Users/Jack Cooper/Documents/iucn/iucn_sim/Maps/AquaMaps_species_assemblage.RData")
+save(baskets_sharks_weightsAqMap,file="~/AquaMaps_species_assemblage.RData")
 
 # Species-grid matrix: Aquamaps climate change (RCP 4.5)
 baskets_RCP45 <- RCP45_Occ %>%
@@ -474,9 +474,9 @@ FD_RCP45ext <- FD_RCP45ext %>%
   left_join(grids, by = "Grid")
 
 # Save all 3 dataframes for shift calculations and mapping
-save(FD_AqMap,file="C:/Users/Jack Cooper/Documents/iucn/iucn_sim/Maps/FRic_map_present.RData")
-save(FD_RCP45,file="C:/Users/Jack Cooper/Documents/iucn/iucn_sim/Maps/FRic_map_RCP45.RData")
-save(FD_RCP45ext,file="C:/Users/Jack Cooper/Documents/iucn/iucn_sim/Maps/FRic_map_RCP45ext.RData")
+save(FD_AqMap,file="~/FRic_map_present.RData")
+save(FD_RCP45,file="~/FRic_map_RCP45.RData")
+save(FD_RCP45ext,file="~/FRic_map_RCP45ext.RData")
 
 # Create individual species richness maps and save
 SR_AqMap <- AqMap_Occ %>%
@@ -488,7 +488,7 @@ SR_AqMap_map <- SR_AqMap %>%
   group_by(Grid, CenterLat, CenterLong) %>%
   summarise(species_richness = n(), .groups = "drop")
 
-save(SR_AqMap_map,file="C:/Users/Jack Cooper/Documents/iucn/iucn_sim/Maps/SR_map_present.RData")
+save(SR_AqMap_map,file="~/SR_map_present.RData")
 
 SR_RCP45 <- RCP45_Occ %>%
   select(CsquareCode, CenterLat, CenterLong, Species) %>%
@@ -499,7 +499,7 @@ SR_RCP45_map <- SR_RCP45 %>%
   group_by(Grid, CenterLat, CenterLong) %>%
   summarise(species_richness = n(), .groups = "drop")
 
-save(SR_RCP45_map,file="C:/Users/Jack Cooper/Documents/iucn/iucn_sim/Maps/SR_map_RCP45.RData")
+save(SR_RCP45_map,file="~/SR_map_RCP45.RData")
 
 SR_RCP45ext <- RCP45ext_Occ %>%
   select(CsquareCode, CenterLat, CenterLong, Species) %>%
@@ -510,4 +510,5 @@ SR_RCP45ext_map <- SR_RCP45ext %>%
   group_by(Grid, CenterLat, CenterLong) %>%
   summarise(species_richness = n(), .groups = "drop")
 
-save(SR_RCP45ext_map,file="C:/Users/Jack Cooper/Documents/iucn/iucn_sim/Maps/SR_map_RCP45ext.RData")
+save(SR_RCP45ext_map,file="~/SR_map_RCP45ext.RData")
+
