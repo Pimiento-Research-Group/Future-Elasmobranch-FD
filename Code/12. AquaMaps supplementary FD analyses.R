@@ -18,12 +18,12 @@ library(progress)
 library(geometry)
 
 # Source functions
-source("C:/Users/Jack Cooper/Dropbox/Jack's PhD/Chapter 3. Future shark FD/Analyses/R code/Final pipeline R code/Functions/get_indicator_function 2.R")
-source("C:/Users/Jack Cooper/Dropbox/Jack's PhD/Chapter 3. Future shark FD/Analyses/R code/Final pipeline R code/Functions/fonction_FRIC_Global_full.R")
+source("~/get_indicator_function 2.R")
+source("~/fonction_FRIC_Global_full.R")
 
 ## 1. Load all data
 # Load data
-load(file="C:/Users/Jack Cooper/Documents/iucn/Data.RData")
+load(file="~/Data.RData")
 
 # Trait type matrix
 sharks_traits_cat <- tibble(trait_name = c("habitat","vertical","terrestriality","thermo","feeding",
@@ -31,10 +31,10 @@ sharks_traits_cat <- tibble(trait_name = c("habitat","vertical","terrestriality"
                             trait_type = c("N", "N", "O", "O", "O", "N", "Q", "N", "N", "N"))
 
 # Load median IUCN_sim results - Crit E
-load(file = "C:/Users/Jack Cooper/Documents/iucn/iucn_sim/iucn_data/CritE_median_D24.RData")
+load(file = "~/CritE_median_D24.RData")
 
 # Load synonyms and correct
-Synonyms <- read_xlsx("C:/Users/Jack Cooper/Dropbox/Jack's PhD/Chapter 3. Future shark FD/Analyses/DatasetSynonyms.xlsx")
+Synonyms <- read_xlsx("~/DatasetSynonyms.xlsx")
 
 Spp_median.CritE <- Spp_median.CritE %>%
   left_join(Synonyms, by = c("Species" = "iucnsim_name")) %>%
@@ -43,10 +43,10 @@ Spp_median.CritE <- Spp_median.CritE %>%
   distinct(Species, .keep_all = TRUE)
 
 # Load AquaMaps present
-load(file="C:/Users/Jack Cooper/Dropbox/Jack's PhD/Chapter 3. Future shark FD/Data/R data/Maps/AqMap_Occ.RData")
+load(file="~/AqMap_Occ.RData")
 
 # Load RCP 2.6 AquaMaps data & correct for synonyms
-RCP26 <- read_csv("C:/Users/Jack Cooper/Dropbox/Jack's PhD/Chapter 3. Future shark FD/Data/Aquamaps data/Elasmo_rcp26_2100.csv") 
+RCP26 <- read_csv("~/Elasmo_rcp26_2100.csv") 
 
 RCP26 <- RCP26 %>% 
   mutate(sci_name = paste(Genus, Species, sep = " "))
@@ -73,7 +73,7 @@ RCP26_Occ <- RCP26_filtered %>%
   )
 
 # Load RCP 8.5 AquaMaps data & correct for synonymns
-RCP85 <- read_csv("C:/Users/Jack Cooper/Dropbox/Jack's PhD/Chapter 3. Future shark FD/Data/Aquamaps data/Elasmo_rcp85_2100.csv") 
+RCP85 <- read_csv("~/Elasmo_rcp85_2100.csv") 
 
 RCP85 <- RCP85 %>% 
   mutate(sci_name = paste(Genus, Species, sep = " "))
@@ -93,11 +93,11 @@ RCP85_Occ <- RCP85_filtered %>%
   select(Species,SpeciesID,SpecCode,CsquareCode,CenterLat,CenterLong,Probability)
 
 ## 2. Load AquaMaps grids, species-trait matrix, species-assemblage matrix & PCoA coorindates
-load(file="C:/Users/Jack Cooper/Documents/iucn/iucn_sim/Maps/AquaMaps_trait matrix.RData")
-load(file="C:/Users/Jack Cooper/Documents/iucn/iucn_sim/Maps/AquaMaps_pcoa_coordinates.RData")
-load(file="C:/Users/Jack Cooper/Documents/iucn/iucn_sim/Maps/AquaMaps_species_assemblage.RData")
-load(file="C:/Users/Jack Cooper/Documents/iucn/iucn_sim/Maps/Grids.RData")
-load(file="C:/Users/Jack Cooper/Documents/iucn/iucn_sim/Maps/AquaMaps_sp_dist_matrix.RData")
+load(file="~/AquaMaps_trait matrix.RData")
+load(file="~/AquaMaps_pcoa_coordinates.RData")
+load(file="~/AquaMaps_species_assemblage.RData")
+load(file="~/Grids.RData")
+load(file="~/AquaMaps_sp_dist_matrix.RData")
 
 # Form final inputs for FD analyses
 pcoa <- list(li = sp_faxes_coord_sharksAqMap)
@@ -175,8 +175,8 @@ class(baskets_sharks_weightsRCP85ext) <- "numeric"
 
 ## 4. Run FD analyses (n = 4)
 # Load AquaMaps present-day results - no need to redo these
-load(file="C:/Users/Jack Cooper/Documents/iucn/iucn_sim/Maps/FRic_map_present.RData")
-load(file="C:/Users/Jack Cooper/Documents/iucn/iucn_sim/Maps/SR_map_present.RData")
+load(file="~/FRic_map_present.RData")
+load(file="~/SR_map_present.RData")
 
 # Step 1: Create the list of species present in each grid per scenario with progress bar
 pb_test1 <- progress_bar$new(
@@ -552,10 +552,10 @@ FD_RCP85ext <- FD_RCP85ext %>%
   left_join(grids, by = "Grid")
 
 # Save all dataframes for shift calculations and mapping
-save(FD_RCP26,file="C:/Users/Jack Cooper/Documents/iucn/iucn_sim/Maps/FRic_map_RCP26.RData")
-save(FD_RCP26ext,file="C:/Users/Jack Cooper/Documents/iucn/iucn_sim/Maps/FRic_map_RCP26ext.RData")
-save(FD_RCP85,file="C:/Users/Jack Cooper/Documents/iucn/iucn_sim/Maps/FRic_map_RCP85.RData")
-save(FD_RCP85ext,file="C:/Users/Jack Cooper/Documents/iucn/iucn_sim/Maps/FRic_map_RCP85ext.RData")
+save(FD_RCP26,file="~/FRic_map_RCP26.RData")
+save(FD_RCP26ext,file="~/FRic_map_RCP26ext.RData")
+save(FD_RCP85,file="~/FRic_map_RCP85.RData")
+save(FD_RCP85ext,file="~/FRic_map_RCP85ext.RData")
 
 # Create individual species richness maps and save
 SR_RCP26 <- RCP26_Occ %>%
@@ -567,7 +567,7 @@ SR_RCP26_map <- SR_RCP26 %>%
   group_by(Grid, CenterLat, CenterLong) %>%
   summarise(species_richness = n(), .groups = "drop")
 
-save(SR_RCP26_map,file="C:/Users/Jack Cooper/Documents/iucn/iucn_sim/Maps/SR_map_RCP26.RData")
+save(SR_RCP26_map,file="~/SR_map_RCP26.RData")
 
 SR_RCP26ext <- RCP26ext_Occ %>%
   select(CsquareCode, CenterLat, CenterLong, Species) %>%
@@ -578,7 +578,7 @@ SR_RCP26ext_map <- SR_RCP26ext %>%
   group_by(Grid, CenterLat, CenterLong) %>%
   summarise(species_richness = n(), .groups = "drop")
 
-save(SR_RCP26ext_map,file="C:/Users/Jack Cooper/Documents/iucn/iucn_sim/Maps/SR_map_RCP26ext.RData")
+save(SR_RCP26ext_map,file="~/SR_map_RCP26ext.RData")
 
 SR_RCP85 <- RCP85_Occ %>%
   select(CsquareCode, CenterLat, CenterLong, Species) %>%
@@ -589,7 +589,7 @@ SR_RCP85_map <- SR_RCP85 %>%
   group_by(Grid, CenterLat, CenterLong) %>%
   summarise(species_richness = n(), .groups = "drop")
 
-save(SR_RCP85_map,file="C:/Users/Jack Cooper/Documents/iucn/iucn_sim/Maps/SR_map_RCP85.RData")
+save(SR_RCP85_map,file="~/SR_map_RCP85.RData")
 
 SR_RCP85ext <- RCP85ext_Occ %>%
   select(CsquareCode, CenterLat, CenterLong, Species) %>%
@@ -600,4 +600,4 @@ SR_RCP85ext_map <- SR_RCP85ext %>%
   group_by(Grid, CenterLat, CenterLong) %>%
   summarise(species_richness = n(), .groups = "drop")
 
-save(SR_RCP85ext_map,file="C:/Users/Jack Cooper/Documents/iucn/iucn_sim/Maps/SR_map_RCP85ext.RData")
+save(SR_RCP85ext_map,file="~/SR_map_RCP85ext.RData")
