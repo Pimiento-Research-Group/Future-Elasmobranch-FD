@@ -484,8 +484,8 @@ RCP85_FRic_shift <- ggplot() +
   scale_color_gradientn(
     colors = RCP_colors,
     values = scales::rescale(FRic_breaks_RCP85, to = c(0, 1)),
-    limits = c(-0.8, 0.5),
-    breaks = c(-0.8,-0.4,0,0.25,0.5),
+    limits = c(-0.8, 0.6),
+    breaks = c(-0.8,-0.4,0,0.3,0.6),
     labels = scales::label_number(accuracy = 0.01),
     name = expression(Delta ~ FRic)
   ) +
@@ -611,8 +611,8 @@ RCP85ext_FRic_shift <- ggplot() +
   scale_color_gradientn(
     colors = RCP_colors,
     values = scales::rescale(FRic_breaks_RCP85, to = c(0, 1)),
-    limits = c(-0.8, 0.5),
-    breaks = c(-0.8,-0.4,0,0.25,0.5),
+    limits = c(-0.8, 0.6),
+    breaks = c(-0.8,-0.4,0,0.3,0.6),
     labels = scales::label_number(accuracy = 0.01),
     name = expression(Delta ~ FRic)
   ) +
