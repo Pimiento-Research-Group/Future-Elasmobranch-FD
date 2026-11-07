@@ -1,7 +1,7 @@
 # R code for the analysis of: Overfishing extinguishes climate change refugia for elasmobranch functional diversity
 
 ## Authors
-Jack A. Cooper, Gregor H. Mathes, John N. Griffin, Kristin Kaschner, Kathleen Kesner-Reyes, Fabien Leprieur & Catalina Pimiento
+Jack A. Cooper, Gregor H. Mathes, John N. Griffin, Kristin Kaschner, Kathleen N. Kesner-Reyes, Fabien Leprieur & Catalina Pimiento
 
 ## Introduction
 This folder contains R scripts for all analyses exploring the future functional diversity of sharks and rays. 
